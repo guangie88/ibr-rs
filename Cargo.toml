@@ -1,0 +1,9 @@
+[package]
+name = "ibr"
+version = "0.1.0"
+authors = ["Chen Weiguang <chen.weiguang@gmail.com>"]
+
+[dependencies]
+image = "=0.19.0"
+structopt = "=0.2.7"
+vlog = "=0.1.2"
