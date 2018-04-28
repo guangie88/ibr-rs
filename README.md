@@ -1,4 +1,4 @@
-# image-batch-resizer-rs
+# `image-batch-resizer-rs`
 
 [![Build Status](https://travis-ci.org/guangie88/image-batch-resizer-rs.svg?branch=master)](https://travis-ci.org/guangie88/image-batch-resizer-rs)
 [![Build status](https://ci.appveyor.com/api/projects/status/0crl0n8bmx240nls/branch/master?svg=true)](https://ci.appveyor.com/project/guangie88/image-batch-resizer-rs/branch/master)
@@ -29,7 +29,7 @@ This resizes all image files in `input/` directory:
 * `-d`
   * and deletes the origin image files, replacing with the resized ones,
 * `-vvv`
-  * and prints logs at verbosity level of 3,
+  * and prints logs at verbosity level of 3.
 
 For more argument details, type:
 
