@@ -1,6 +1,6 @@
 [package]
 name = "image-batch-resizer"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Chen Weiguang <chen.weiguang@gmail.com>"]
 description = "Image batch resizer executable in Rust"
 repository = "https://github.com/guangie88/image-batch-resizer-rs"
@@ -15,6 +15,7 @@ codecov = { repository = "guangie88/image-batch-resizer-rs" }
 [dependencies]
 failure = "=0.1.1"
 image = "=0.19.0"
+glob = "=0.2.11"
 structopt = "=0.2.7"
 structopt-derive = "=0.2.7"
 vlog = "=0.1.2"

@@ -1,7 +1,9 @@
 #![cfg_attr(feature = "cargo-clippy", deny(clippy))]
 #![deny(missing_debug_implementations, warnings)]
 
+#[macro_use]
 extern crate failure;
+extern crate glob;
 extern crate image;
 extern crate structopt;
 #[macro_use]
@@ -9,8 +11,9 @@ extern crate structopt_derive;
 #[macro_use]
 extern crate vlog;
 
+use glob::glob;
 use image::FilterType;
-use std::fs::read_dir;
+use std::fs::create_dir_all;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -28,10 +31,14 @@ struct Conf {
     /// Delete original image file that has been successfully resized
     delete: bool,
 
-    #[structopt(short = "s", long = "suffix", default_value = "_resized")]
-    /// Only used when delete is false. Suffix to append to the resized image
-    /// file name.
-    suffix: String,
+    #[structopt(short = "o", long = "outdir", default_value = "resized")]
+    /// Only used when delete is false. Directory path to append to given `indir`
+    /// path when saving the resized image files.
+    outdir: PathBuf,
+
+    #[structopt(short = "g", long = "glob", default_value = "*")]
+    /// Glob pattern whose files must match in `indir`.
+    glob: String,
 
     #[structopt(short = "m", long = "max")]
     /// Finds the maximum side (between height and width) and resize that side
@@ -70,17 +77,41 @@ macro_rules! cont_log_opt {
 fn run(conf: &Conf) -> Result<()> {
     vlog::set_verbosity_level(conf.verbose as usize);
 
-    let paths = read_dir(&conf.indir)?;
+    if !conf.indir.exists() {
+        Err(format_err!(
+            "{:?} input directory does not exists!",
+            &conf.indir
+        ))?
+    }
+
+    let merged_glob = {
+        let mut indir = conf.indir.clone();
+        indir.push(&conf.glob);
+        indir.to_string_lossy().to_string()
+    };
+
+    // gets all the image files
+    let paths = glob(&merged_glob)?;
 
     let mut paths: Vec<_> = paths
-        .filter_map(|path| path.map(|path| path.path()).ok())
+        .filter_map(|path| path.ok())
+        .filter(|path| !path.is_dir())
         .collect();
 
     paths.sort();
 
-    for path in paths {
-        v2!("Resizing {:?}...", path);
+    // create the output directory to hold resized images
+    let outdir = {
+        let mut outdir = conf.indir.clone();
+        outdir.push(&conf.outdir);
+        outdir
+    };
 
+    if !conf.delete {
+        create_dir_all(&outdir)?;
+    }
+
+    for path in paths {
         let im = cont_log_err!(image::open(&path), "Error opening image: {}");
 
         let resized_im = im.resize(
@@ -90,33 +121,22 @@ fn run(conf: &Conf) -> Result<()> {
         );
 
         let resized_path = if conf.delete {
+            v2!("Resizing {:?}...", path);
             path
         } else {
-            let file_stem = cont_log_opt!(
-                path.file_stem(),
+            let file_name = cont_log_opt!(
+                path.file_name(),
                 format!(
                     "{:?} unexpectedly does not have file stem!",
                     path
                 )
             );
 
-            let ext = cont_log_opt!(
-                path.extension(),
-                format!(
-                    "{:?} unexpectedly does not have extension!",
-                    path
-                )
-            );
+            let mut resized_path = outdir.clone();
+            resized_path.push(&file_name);
 
-            let mut new_path = path.clone();
-
-            let mut file_name = file_stem.to_os_string();
-            file_name.push(&conf.suffix);
-            file_name.push(".");
-            file_name.push(ext);
-
-            new_path.set_file_name(&file_name);
-            new_path
+            v2!("Resizing {:?} -> {:?}...", path, resized_path);
+            resized_path
         };
 
         cont_log_err!(
