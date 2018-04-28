@@ -31,7 +31,12 @@ struct Conf {
     /// Delete original image file that has been successfully resized
     delete: bool,
 
-    #[structopt(short = "o", long = "outdir", default_value = "resized")]
+    #[structopt(
+        short = "o",
+        long = "outdir",
+        default_value = "resized",
+        parse(from_os_str)
+    )]
     /// Only used when delete is false. Directory path to append to given `indir`
     /// path when saving the resized image files.
     outdir: PathBuf,
