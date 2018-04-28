@@ -1,5 +1,5 @@
 [package]
-name = "ibr"
+name = "image-batch-resizer"
 version = "0.1.0"
 authors = ["Chen Weiguang <chen.weiguang@gmail.com>"]
 

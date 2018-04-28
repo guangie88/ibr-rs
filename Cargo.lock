@@ -177,17 +177,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ibr"
-version = "0.1.0"
-dependencies = [
- "failure 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "image 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "structopt 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "structopt-derive 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
- "vlog 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "image"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -202,6 +191,17 @@ dependencies = [
  "num-traits 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "png 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "scoped_threadpool 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "image-batch-resizer"
+version = "0.1.0"
+dependencies = [
+ "failure 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "image 0.19.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "structopt 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "structopt-derive 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "vlog 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
