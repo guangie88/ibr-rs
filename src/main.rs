@@ -17,10 +17,10 @@ use structopt::StructOpt;
 type Result<T> = std::result::Result<T, failure::Error>;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name = "line-stickers-scraper-conf")]
-/// Configuration for line-stickers-scraper
+#[structopt(name = "image-batch-resizer")]
+/// Configuration for image-batch-resizer
 struct Conf {
-    #[structopt(short = "i", long = "indir", parse(from_os_str))]
+    #[structopt(parse(from_os_str))]
     /// Input directory with the image files
     indir: PathBuf,
 
